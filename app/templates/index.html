@@ -1,0 +1,277 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Indecorous System</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script src="scripts/libv86.js"></script>
+
+    <!-- @todo: [Xterm.js](https://xtermjs.org)-->
+    <!-- <script src="scripts/xterm.js"></script>
+    <link rel="stylesheet" href="styles/xterm.css">-->
+
+    <!-- <link rel="stylesheet" href="styles/simple-keyboard.css">
+    <script src="scripts/simple-keyboard.js"></script> -->
+
+    <script src="scripts/jquery-3.5.1.min.js"></script>
+
+    <link rel="stylesheet" href="fonts/stylesheet.css">
+    <link rel="stylesheet" href="styles/topcoat-main.css">
+    <link rel="stylesheet" href="styles/topcoat-mobile-dark.min.css">
+    <link rel="stylesheet" href="styles/topcoat-desktop-dark.min.css">
+    <style type="text/css">
+      body {
+        padding: 1em;
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'source-sans-pro';
+        font-weight: normal;
+        display: inline;
+      }
+
+      #screen-keyboard-wrapper {
+        position: relative;
+      }
+
+      #screen-container {
+        padding-bottom: 1em;
+        position: relative;
+        z-index: 10;
+      }
+
+      /*.simple-keyboard {
+        width: 670px;
+        color: #000;
+        margin-bottom: 1em;
+      }*/
+
+      #screen-keyboard {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 0;
+      }
+    </style>
+
+    <link rel="shortcut icon" href="favicon.ico">
+  </head>
+  <body class="dark">
+
+    <article class="component">
+      <h1>Tiny Core Linux</h1>
+    </article>
+
+    <article class="component">
+      <section>
+        <div class="topcoat-button-bar">
+          <div class="topcoat-button-bar__item">
+            <button id="reference-book" class="topcoat-button-bar__button--large">Tiny Core Linux Book</button>
+          </div>
+          <div class="topcoat-button-bar__item">
+            <button id="reference-packages" class="topcoat-button-bar__button--large">List of Packages</button>
+          </div>
+        </div>
+      </section>
+    </article>
+
+    <div id="screen-keyboard-wrapper">
+      <div id="screen-container">
+        <div style="white-space: pre; font: 14px monospace; line-height: 14px"></div>
+        <canvas style="display: none"></canvas>
+      </div>
+
+      <!-- <div class="simple-keyboard"></div> -->
+
+      <!-- Input element positioned behind screen container, 
+      to trigger the soft keyboard on mobiles, capture any input 
+      and send it to the emulator -->
+      <input type="text" inputmode="text" id="screen-keyboard" />
+    </div>
+
+    <article class="component">
+      <h2>Reboot</h2>
+    </article>
+
+    <article class="component">
+      <section>
+        <h4>Restart the system</h4>
+
+        <label class="topcoat-switch">
+          <input id="restart-system" type="checkbox" class="topcoat-switch__input" checked>
+          <div class="topcoat-switch__toggle"></div>
+        </label>
+
+      </section>
+    </article>
+
+    <!-- <article class="component">
+      <h2>Copy &amp; Paste</h2>
+    </article>
+
+    <article class="component">
+      <section>
+        <h4>Paste text here and send it to the system</h4>
+        <input id="text-to-send" type="text" class="topcoat-text-input" placeholder="" value="">
+        <input id="send-text" type="button" value="Send" class="topcoat-button--cta">
+      </section>
+    </article> -->
+
+    <article class="component">
+      <h2>State</h2>
+    </article>
+
+    <article class="component">
+      <section>
+        <h4>Save State to File</h4>
+        <input id="save-file" type="button" value="Save" class="topcoat-button--cta">
+      </section>
+    </article>
+
+    <article class="component">
+      <section>
+        <h4>Restore State from File</h4>
+        <input id="restore-file" type="file" class="topcoat-button--cta">
+      </section>
+    </article>
+
+    <!-- @todo: v86 script -->
+    <script>
+      "use strict";
+
+      window.onload = function()
+      {
+        var emulator = window.emulator = new V86Starter({
+          // memory_size: 32 * 1024 * 1024,
+          // vga_memory_size: 2 * 1024 * 1024,
+          screen_container: document.getElementById("screen-container"),
+          network_relay_url: "wss://relay.widgetry.org/",
+          bios: {
+            url: "bios/seabios.bin",
+          },
+          vga_bios: {
+            url: "bios/vgabios.bin",
+          },
+          cdrom: {
+            url: "system-images/Core-7.2.iso",
+          },
+          filesystem: {
+          },
+          autostart: true,
+        });
+
+        // let Keyboard = window.SimpleKeyboard.default;
+
+        // let myKeyboard = new Keyboard({
+        //   onKeyPress: button => onKeyPress(button)
+        // });
+
+        // function onKeyPress(button) {
+        //   window.keyboardPress = button;
+        //   if (button == '{enter}') {
+        //     emulator.keyboard_send_text('\n');
+        //   }
+        //   else if (button == '{space}') {
+        //     emulator.keyboard_send_text(' ');
+        //   } else if (!button.startsWith('{')) {
+        //     emulator.keyboard_send_text(button);
+        //   } else {
+        //     // @todo:
+        //     console.log('Unhandled keyboard event: ', button);
+        //   }
+        // }
+
+        $("#screen-container").click(function() {
+          $("#screen-keyboard").focus();
+        });
+        $("#screen-keyboard").keypress(function(event) {
+          if (event.which == 13) {
+            console.log('Enter'); // @todo:
+            emulator.keyboard_send_text("\n");
+          } else {
+            console.log(String.fromCharCode(event.which)); // @todo:
+            emulator.keyboard_send_text(String.fromCharCode(event.which));
+          }
+          $("#screen-keyboard").val("");
+        });
+
+        document.getElementById("reference-book").onclick = function()
+        {
+          window.open("http://tinycorelinux.net/corebook.pdf");
+        }
+
+        document.getElementById("reference-packages").onclick = function()
+        {
+          window.open("http://tinycorelinux.net/7.x/x86/tcz/");
+        }
+
+        document.getElementById("restart-system").onchange = function()
+        {
+          if (!document.getElementById("restart-system").disabled) {
+            emulator.restart();
+            document.getElementById("restart-system").disabled = true;
+            window.setTimeout(() => {
+              document.getElementById("restart-system").disabled = false;
+              document.getElementById("restart-system").checked = true;
+            }, 3 * 1000);
+          }
+        }
+
+        document.getElementById("send-text").onclick = function()
+        {
+          emulator.keyboard_send_text(document.getElementById("text-to-send").value);
+        }
+
+        document.getElementById("save-file").onclick = function()
+        {
+          emulator.save_state(function(error, new_state)
+          {
+            if(error)
+            {
+              throw error;
+            }
+
+            var a = document.createElement("a");
+            a.download = "v86state.bin";
+            a.href = window.URL.createObjectURL(new Blob([new_state]));
+            a.dataset.downloadurl = "application/octet-stream:" + a.download + ":" + a.href;
+            a.click();
+          });
+
+          this.blur();
+        };
+
+        document.getElementById("restore-file").onchange = function()
+        {
+          if(this.files.length)
+          {
+            var filereader = new FileReader();
+            emulator.stop();
+
+            filereader.onload = function(e)
+            {
+              emulator.restore_state(e.target.result);
+              emulator.run();
+            };
+
+            filereader.readAsArrayBuffer(this.files[0]);
+
+            this.value = "";
+          }
+
+          this.blur();
+        };
+      }
+    </script>
+
+    <!-- <div id="terminal"></div> -->
+
+    <!-- @todo: Xterm script -->
+    <!-- <script>
+      var term = new Terminal();
+      term.open(document.getElementById('terminal'));
+      term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ')
+    </script> -->
+
+  </body>
+</html>
