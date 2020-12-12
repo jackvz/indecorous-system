@@ -1,6 +1,6 @@
 # [Indecorous System](https://system.indecorous.online/)
 
-Run a virtualised Linux box in the browser.
+Run a virtualised Linux box in your web browser.
 
 ## About
 
