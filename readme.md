@@ -2,9 +2,7 @@
 
 Run a virtualised Linux box in your web browser.
 
-## About
-
-### Built With
+## Built With
 
 - [v86](https://copy.sh/v86/) - JavaScript x86 CPU and hardware emulator - [License](./v86-license)
 - [SeaBIOS](https://www.seabios.org/SeaBIOS) - [License](./seabios-license)
@@ -24,6 +22,10 @@ tce-load -wi [package]
 [See a list of Tiny Core Linux 7's packages.](http://tinycorelinux.net/7.x/x86/tcz/)
 
 [See a list of Tiny Core Linux 11's packages.](http://tinycorelinux.net/11.x/x86/tcz/)
+
+## See Also
+
+[Browser Shell](https://humphd.github.io/browser-shell/) using v86, working with the JS filesystem and connected to [Xterm.js](https://xtermjs.org), though without network connectivity.
 
 ## Setup
 
