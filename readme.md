@@ -10,6 +10,10 @@ Run a virtualised Linux box in your web browser.
 - [Topcoat](http://topcoat.io/)
 <!-- - [Simple keyboard](https://virtual-keyboard.js.org/) -->
 
+<!-- @todo: FreeBSD; https://download.freebsd.org/ftp/releases/i386/i386/ISO-IMAGES/12.2/ -->
+<!-- @todo: Arch Linux: https://archlinux32.org/ -->
+<!-- @todo: Buildroot: https://buildroot.org/ -->
+
 ## About Tiny Core Linux
 
 [The Tiny Core Linux Book](http://tinycorelinux.net/corebook.pdf)
